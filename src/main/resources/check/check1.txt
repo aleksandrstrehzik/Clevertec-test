@@ -1,0 +1,15 @@
+                 CASH RECEIPT
+                 kdsk
+                 +203920392039023
+Date                              2023-02-18
+Time                              15:41:35.612621500
+_____________________________________________________
+№   Description           Price     Total
+8   Bread             10.50          75.60
+             promotional item discount 8.40
+9   Milk             34.22          307.98
+5   Bun             5.50          27.50
+______________________________________________________
+Total cost                                   419.48
+Discount amount                            41.95
+Discount price                             377.53
