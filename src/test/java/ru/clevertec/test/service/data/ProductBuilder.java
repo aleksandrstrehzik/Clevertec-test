@@ -1,6 +1,5 @@
 package ru.clevertec.test.service.data;
 
-import lombok.*;
 import ru.clevertec.test.repository.entity.product.Product;
 import ru.clevertec.test.repository.entity.product.Type;
 
@@ -15,6 +14,15 @@ public class ProductBuilder implements TestBuilder<Product> {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public ProductBuilder id(int id) {
+        this.setId(id);
+        return this;
     }
 
     private Type type = Type.MILK;
