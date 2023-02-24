@@ -1,6 +1,7 @@
 package ru.clevertec.test.service.impl.checks;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,20 +33,6 @@ class CheckWithDiscountServiceTest {
     @InjectMocks
     private CheckWithDiscountService checkWithDiscountService;
 
-    static Stream<Arguments> getCheckDiscountAmountArguments() {
-        return Stream.of(
-                arguments("10", "15", "10", "6.0"),
-                arguments("15", "800", "300", "545"),
-                arguments("5", "650", "156", "501.80"));
-    }
-
-    static Stream<Arguments> getCheckCostWithDiscountArguments() {
-        return Stream.of(
-                arguments("10", "200", "180"),
-                arguments("40", "800", "480"),
-                arguments("20", "400", "320"));
-    }
-
     static Stream<Arguments> getCheckNominationCostArguments() {
         Product bread = ProductBuilder.aProduct().price("10").build();
         Product milk = ProductBuilder.aProduct().price("23").build();
@@ -54,10 +41,6 @@ class CheckWithDiscountServiceTest {
                 arguments(bread, 5, "45.0"),
                 arguments(milk, 8, "165.6"),
                 arguments(chocolate, 9, "567.0"));
-    }
-
-    @BeforeEach
-    void setUp() {
     }
 
     @Test
@@ -82,29 +65,47 @@ class CheckWithDiscountServiceTest {
         assertThat(checkWithDiscountService.generalСost()).isEqualTo(new BigDecimal("5.50"));
     }
 
-    @ParameterizedTest
-    @MethodSource("getCheckDiscountAmountArguments")
-    void CheckDiscountAmount(String discount, String mocReturn, String generalCost, String expected) {
-        Card card = CardBuilder.aCard().discount(discount).build();
+    @Nested
+    class DiscountAmount {
 
-        Mockito.doReturn(new BigDecimal(mocReturn))
-                .when(simpleCheckService).generalСost();
+        @ParameterizedTest
+        @MethodSource("getCheckDiscountAmountArguments")
+        void CheckDiscountAmount(String discount, String mocReturn, String generalCost, String expected) {
+            Card card = CardBuilder.aCard().discount(discount).build();
 
-        assertThat(checkWithDiscountService.discountAmount(card,
-                new BigDecimal(generalCost))).isEqualTo(new BigDecimal(expected));
-    }
+            Mockito.doReturn(new BigDecimal(mocReturn))
+                    .when(simpleCheckService).generalСost();
 
-    @ParameterizedTest
-    @MethodSource("getCheckCostWithDiscountArguments")
-    void CheckCostWithDiscount(String discount, String cost, String expected) {
-        Card card = CardBuilder.aCard().discount(discount).build();
+            assertThat(checkWithDiscountService.discountAmount(card,
+                    new BigDecimal(generalCost))).isEqualTo(new BigDecimal(expected));
+        }
 
-        Mockito.doReturn(new BigDecimal(cost))
-                .when(simpleCheckService).generalСost();
+        @ParameterizedTest
+        @MethodSource("getCheckCostWithDiscountArguments")
+        void CheckCostWithDiscount(String discount, String cost, String expected) {
+            Card card = CardBuilder.aCard().discount(discount).build();
 
-        assertThat(checkWithDiscountService.costWithDiscount(card, new BigDecimal(cost)))
-                .isEqualTo(new BigDecimal(expected));
+            Mockito.doReturn(new BigDecimal(cost))
+                    .when(simpleCheckService).generalСost();
 
+            assertThat(checkWithDiscountService.costWithDiscount(card, new BigDecimal(cost)))
+                    .isEqualTo(new BigDecimal(expected));
+
+        }
+
+        static Stream<Arguments> getCheckDiscountAmountArguments() {
+            return Stream.of(
+                    arguments("10", "15", "10", "6.0"),
+                    arguments("15", "800", "300", "545"),
+                    arguments("5", "650", "156", "501.80"));
+        }
+
+        static Stream<Arguments> getCheckCostWithDiscountArguments() {
+            return Stream.of(
+                    arguments("10", "200", "180"),
+                    arguments("40", "800", "480"),
+                    arguments("20", "400", "320"));
+        }
     }
 
     @ParameterizedTest
