@@ -15,6 +15,7 @@ import java.util.List;
 @JacksonXmlRootElement
 public class UserController {
 
+    public static final String APPLICATION_XML = "application/xml";
     /**
      * Service field
      */
@@ -24,7 +25,7 @@ public class UserController {
      * Displays all existing users
      * @return All users
      */
-    @GetMapping(value = "/getAll", produces = "application/xml")
+    @GetMapping(value = "/getAll", produces = APPLICATION_XML)
     public List<User> getUsers() {
         return userService.getAll();
     }
@@ -56,7 +57,7 @@ public class UserController {
      * @param id update user id
      * @return user or null
      */
-    @GetMapping(value = "/get/{id}", produces = "application/xml")
+    @GetMapping(value = "/get/{id}", produces = APPLICATION_XML)
     public User getUser(@PathVariable("id") Integer id) {
         return userService.getById(id);
     }

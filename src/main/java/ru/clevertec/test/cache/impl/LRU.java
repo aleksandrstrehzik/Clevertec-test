@@ -1,6 +1,5 @@
 package ru.clevertec.test.cache.impl;
 
-import lombok.ToString;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -14,7 +13,6 @@ import java.util.Map;
  */
 @ConditionalOnProperty(prefix = "cache", name = "algorithm", havingValue = "LRU")
 @Component
-@ToString
 public class LRU<ID, T> implements CacheAlgorithm<ID, T> {
 
     /**

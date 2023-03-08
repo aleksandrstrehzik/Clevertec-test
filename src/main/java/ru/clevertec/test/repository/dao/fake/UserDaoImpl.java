@@ -1,6 +1,5 @@
 package ru.clevertec.test.repository.dao.fake;
 
-import lombok.ToString;
 import org.springframework.stereotype.Repository;
 import ru.clevertec.test.annotation.Cache;
 import ru.clevertec.test.repository.entity.User;
@@ -14,7 +13,6 @@ import java.util.Map;
  * @Author Strezhik
  */
 @Repository
-@ToString
 public class UserDaoImpl implements UserDAO {
 
     /**
