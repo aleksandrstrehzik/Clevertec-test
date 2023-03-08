@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    password: Ohumir89
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    driver-class-name: org.postgresql.Driver
+server:
+  port: 8081
+cache:
+  size: 3
+  algorithm: LRU
