@@ -15,15 +15,18 @@ configurations {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.projectlombok:lombok:1.18.20'
-    compileOnly 'org.projectlombok:lombok'
+    compileOnly "org.projectlombok:lombok:1.18.24"
+    compileOnly "org.mapstruct:mapstruct:1.5.3.Final"
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.5.3.Final"
+    annotationProcessor "org.projectlombok:lombok:1.18.24"
     runtimeOnly 'org.postgresql:postgresql'
-    annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.assertj:assertj-core:3.24.2'
     testImplementation 'org.mockito:mockito-core:5.1.1'
@@ -32,7 +35,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: '3.0.4'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '3.0.4'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.2'
-    implementation 'org.springframework.boot:spring-boot-starter-validation:3.0.4'
+    implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
 }
 
 tasks.named('test') {

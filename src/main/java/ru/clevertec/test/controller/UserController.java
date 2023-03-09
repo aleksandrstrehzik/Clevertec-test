@@ -2,15 +2,17 @@ package ru.clevertec.test.controller;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
-import ru.clevertec.test.repository.entity.User;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import ru.clevertec.test.dto.UserDto;
 import ru.clevertec.test.service.impl.UserService;
 
+import javax.validation.Valid;
 import java.util.List;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @JacksonXmlRootElement
 public class UserController {
@@ -22,43 +24,73 @@ public class UserController {
     private final UserService userService;
 
     /**
+     * Enters method
+     * @params userDto - empty UserDto
+     * @return to the opening page
+     */
+    @GetMapping("/")
+    public String mainPage(@ModelAttribute("user") UserDto userDto, Model model) {
+        model.addAttribute("user", userDto);
+        return "main-page";
+    }
+
+    /**
      * Displays all existing users
      * @return All users
      */
+    @ResponseBody
     @GetMapping(value = "/getAll", produces = APPLICATION_XML)
-    public List<User> getUsers() {
+    public List<UserDto> getUsers() {
         return userService.getAll();
-    }
-
-    @GetMapping("/delete/{id}")
-    public void deleteUsers(@PathVariable("id") Integer id) {
-        userService.delete(id);
     }
 
     /**
      * Delete user
      * @param id delete user id
      */
-    @GetMapping("/add/{id}")
-    public void addUsers(@PathVariable("id") Integer id) {
-        userService.add(User.builder().id(id).build());
+    @ResponseBody
+    @GetMapping("/delete/{id}")
+    public void deleteUsers(@PathVariable("id") Integer id) {
+        userService.delete(id);
+    }
+
+    /**
+     * Add user
+     * @param userDto user to add
+     * @return redirect to main-page
+     */
+    @PostMapping("/add")
+    public String addUsers(@ModelAttribute("user") @Valid UserDto userDto,
+                         BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "redirect:/";
+        }
+        userService.add(userDto);
+        return "redirect:/";
     }
 
     /**
      * Update user
-     * @param id update user id
+     * @param userDto user to add
+     * @return redirect to main-page
      */
-    @GetMapping("/update/{id}")
-    public void updateUsers(@PathVariable("id") Integer id) {
-        userService.update(User.builder().id(id).build());
+    @PostMapping("/update")
+    public String updateUsers(@ModelAttribute("user") @Valid UserDto userDto,
+                            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "redirect:/";
+        }
+        userService.update(userDto);
+        return "redirect:/";
     }
     /**
      * Get user by id
      * @param id update user id
-     * @return user or null
+     * @return userDto or null
      */
+    @ResponseBody
     @GetMapping(value = "/get/{id}", produces = APPLICATION_XML)
-    public User getUser(@PathVariable("id") Integer id) {
+    public UserDto getUser(@PathVariable("id") Integer id) {
         return userService.getById(id);
     }
 }

@@ -2,14 +2,22 @@ package ru.clevertec.test.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.clevertec.test.dto.UserDto;
+import ru.clevertec.test.dto.mapper.UserMapper;
 import ru.clevertec.test.repository.dao.fake.UserDAO;
 import ru.clevertec.test.repository.entity.User;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
+
+    /**
+     * Bean to convert user in Dto and conversely
+     */
+    private final UserMapper userMapper;
 
     /**
      * Database field
@@ -19,11 +27,11 @@ public class UserServiceImpl implements UserService{
     /**
      * Get a user from the database
      * @param id - requested user with id
-     * @return User or null
+     * @return UserDto or null
      */
     @Override
-    public User getById(Integer id) {
-        return userDAO.getById(id);
+    public UserDto getById(Integer id) {
+        return userMapper.toDto(userDAO.getById(id));
     }
 
     /**
@@ -31,8 +39,10 @@ public class UserServiceImpl implements UserService{
      * @return All users from database
      */
     @Override
-    public List<User> getAll() {
-        return userDAO.getAll();
+    public List<UserDto> getAll() {
+        return userDAO.getAll().stream()
+                .map(userMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -40,8 +50,8 @@ public class UserServiceImpl implements UserService{
      * @param user - user to add to database
      */
     @Override
-    public void add(User user) {
-        userDAO.post(user);
+    public void add(UserDto user) {
+        userDAO.post(userMapper.toEntity(user));
     }
 
     /**
@@ -58,7 +68,7 @@ public class UserServiceImpl implements UserService{
      * @param user - user to update in database
      */
     @Override
-    public void update(User user) {
-        userDAO.put(user);
+    public void update(UserDto user) {
+        userDAO.put(userMapper.toEntity(user));
     }
 }

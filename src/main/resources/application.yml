@@ -4,8 +4,13 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     driver-class-name: org.postgresql.Driver
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
 server:
   port: 8081
 cache:
   size: 3
   algorithm: LRU
+
